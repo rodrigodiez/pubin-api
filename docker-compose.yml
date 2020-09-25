@@ -1,0 +1,18 @@
+version: "2.2"
+services:
+  api:
+    build: .
+    command: ["npm", "run", "start:dev"]
+    environment:
+      - ES_CLUSTER=http://elasticsearch:9200
+      - ES_INDEX=nodes
+      - KOA_PORT=8080
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./src:/usr/src/app/src"
+    networks:
+      - pubbing-in-datamining_esnet
+networks:
+  pubbing-in-datamining_esnet:
+    external: true
