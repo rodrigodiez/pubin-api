@@ -30,4 +30,4 @@ spec:
                   name: es-credentials
                   key: ES_PASSWORD
             - name: KOA_PORT
-              value: 8080
+              value: "8080"
