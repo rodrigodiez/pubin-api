@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: pub-in-api
-          image: rodrigodiez/pub-in-api:${CIRCLE_SHA1}
+          image: rodrigodiez/pubin-api:${CIRCLE_SHA1}
           ports:
             - containerPort: 8080
           env:
