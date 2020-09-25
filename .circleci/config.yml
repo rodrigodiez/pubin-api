@@ -1,0 +1,41 @@
+version: 2.1
+orbs:
+  node: circleci/node@3.0.0
+  docker: circleci/docker@1.4.0
+  kubernetes: circleci/kubernetes@0.11.1
+  envsubst: sawadashota/envsubst@1.1.0
+jobs:
+  deploy:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - checkout
+      - kubernetes/install-kubectl
+      - kubernetes/install-kubeconfig:
+          kubeconfig: KUBECONFIG_DATA
+      - envsubst/install
+      - run: |
+          envsubst <./platform/k8s/deployment.yml >./platform/k8s/deployment.out
+          mv ./platform/k8s/deployment.out ./platform/k8s/deployment.yml
+      - kubernetes/create-or-update-resource:
+          resource-file-path: ./platform/k8s/deployment.yml
+          show-kubectl-command: true
+
+workflows:
+  build:
+    jobs:
+      - node/test
+      - docker/publish:
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          tag: $CIRCLE_SHA1
+          docker-username: DOCKERHUB_USERNAME
+          docker-password: DOCKERHUB_PASSWORD
+          use-remote-docker: true
+          executor: docker/docker
+          requires:
+            - node/test
+          context: lab
+      - deploy:
+          requires:
+            - docker/publish
+          context: lab

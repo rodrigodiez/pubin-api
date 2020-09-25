@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pub-in-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pub-in-api
+  template:
+    metadata:
+      labels:
+        app: pub-in-api
+    spec:
+      containers:
+        - name: pub-in-api
+          image: rodrigodiez/pub-in-api:${CIRCLE_SHA1}
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ES_CLUSTER
+              value: https://rodrigos-2nd-cluster-6868680071.eu-west-1.bonsaisearch.net:443
+            - name: ES_INDEX
+              value: pubin-test-nodes
+            - name: ES_ACCESS_KEY
+              value: BCVZXg4WjP
+            - name: ES_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: es-credentials
+                  key: ES_PASSWORD
+            - name: KOA_PORT
+              value: 8080
