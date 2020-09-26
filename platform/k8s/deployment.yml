@@ -19,15 +19,27 @@ spec:
             - containerPort: 8080
           env:
             - name: ES_CLUSTER
-              value: https://rodrigos-2nd-cluster-6868680071.eu-west-1.bonsaisearch.net:443
+              valueFrom:
+                configMapKeyRef:
+                  name: elasticsearch
+                  key: cluster
             - name: ES_INDEX
-              value: pubin-test-nodes
+              valueFrom:
+                configMapKeyRef:
+                  name: pub-in-svc
+                  key: esIndex
             - name: ES_ACCESS_KEY
-              value: BCVZXg4WjP
+              valueFrom:
+                secretKeyRef:
+                  name: pub-in-svc
+                  key: esAccessKey
             - name: ES_ACCESS_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: es-credentials
-                  key: ES_PASSWORD
+                  name: pub-in-svc
+                  key: esAccessSecret
             - name: KOA_PORT
-              value: "8080"
+              valueFrom:
+                configMapKeyRef:
+                  name: pub-in-svc
+                  key: koaPort

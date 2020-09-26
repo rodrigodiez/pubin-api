@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pub-in-svc
+data:
+  esIndex: pubin-test-nodes
+  koaPort: "8080"
