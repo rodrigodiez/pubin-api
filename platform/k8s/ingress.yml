@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: pub-in-api-ingress
+  name: pub-in-svc
   annotations:
     kubernetes.io/ingress.class: nginx
 spec:
@@ -12,5 +12,5 @@ spec:
           - path: /api
             pathType: Prefix
             backend:
-              serviceName: pub-in-api
+              serviceName: pub-in-svc
               servicePort: 80
